@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #333333;
+  --surface: #ffffff;
+  --surface-muted: #f5f5f5;
+  --border-subtle: #e5e7eb;
+  --muted-foreground: #5f6368;
+  --input-background: #ffffff;
+  --ring: #059669;
+  /* Escala de fuente para el panel de accesibilidad (1 = tamaño normal) */
+  --font-scale: 1;
+  --scrollbar-thumb: rgba(95, 99, 104, 0.45);
+  --scrollbar-thumb-hover: rgba(95, 99, 104, 0.65);
+  --scrollbar-track: transparent;
+}
+
+html.dark {
+  color-scheme: dark;
+  /* Superficies tipo Material: fondo base + tarjetas un escalón más claras */
+  --background: #121212;
+  --foreground: #e8eaed;
+  --surface: #1e1f25;
+  --surface-muted: #2d2f38;
+  --border-subtle: #3c4043;
+  --muted-foreground: #9aa0a6;
+  --input-background: #303136;
+  --ring: #34d399;
+  --scrollbar-thumb: rgba(154, 160, 166, 0.45);
+  --scrollbar-thumb-hover: rgba(154, 160, 166, 0.7);
+}
+
+/* El tamaño base del texto se multiplica por --font-scale */
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
+/* Modo de alto contraste: aumenta el contraste visual de toda la app */
+html.high-contrast {
+  filter: contrast(1.5);
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+/* Scrollbars globales — estilo sobrio tipo Material / Google */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@layer components {
+  /* Input reutilizable en login y formularios auth */
+  .quorum-input {
+    @apply w-full rounded-lg border px-3 py-2 text-sm transition-colors;
+    @apply border-borderSubtle bg-input text-foreground placeholder:text-muted;
+    @apply focus:border-transparent focus:outline-none focus:ring-2 focus:ring-verde;
+  }
+
+  /* select / input en filtros (combinar con w-full mt-1, o pl-10 pr-3 para búsqueda) */
+  .quorum-field {
+    @apply rounded-lg border border-borderSubtle bg-input px-3 py-2 text-sm text-foreground transition-colors;
+    @apply focus:border-transparent focus:outline-none focus:ring-2 focus:ring-verde;
+  }
+}
+
+/* Aurora ligero — animación por transform (GPU); sin background-position ni blend modes */
+@keyframes aurora-blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(5%, -3%) scale(1.05);
+  }
+  66% {
+    transform: translate(-4%, 4%) scale(0.95);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Patrón de puntos para fondos de login y páginas de autenticación */
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Blobs del AuroraBackground — duración vía --aurora-blob-duration en cada blob */
+  .animate-aurora-blob-drift {
+    animation: aurora-blob-drift var(--aurora-blob-duration, 20s) ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora-blob-drift {
+    animation: none;
+  }
+}

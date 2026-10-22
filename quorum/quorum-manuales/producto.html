@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Producto — QUORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/quorum-docs.css" />
+  </head>
+  <body>
+    <a class="doc-skip" href="#contenido">Ir al contenido</a>
+    <header class="doc-header">
+      <div class="doc-header-inner">
+        <div class="doc-brand">
+          <img
+            class="doc-brand-wordmark"
+            src="assets/wordmark-quorum.png"
+            width="280"
+            height="84"
+            alt="Quorum"
+            decoding="async"
+          />
+          <span class="doc-brand-text">
+            <span class="doc-brand-suffix"> — Producto</span>
+          </span>
+        </div>
+        <button type="button" class="doc-nav-toggle" aria-controls="doc-nav">Menú</button>
+        <nav id="doc-nav" class="doc-nav" aria-label="Principal">
+          <a href="ventas.html" data-doc="ventas.html">Ventas</a>
+          <a href="producto.html" data-doc="producto.html">Producto</a>
+          <a href="manual-usuario.html" data-doc="manual-usuario.html">Manual usuario</a>
+          <a href="manual-tecnico.html" data-doc="manual-tecnico.html">Manual técnico</a>
+          <a href="manual.html" data-doc="manual.html">Índice manuales</a>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Tema claro/oscuro">
+            Tema
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="doc-main">
+      <div class="hero" style="text-align: left; padding-top: 1rem">
+        <h1>Ficha del software QUORUM</h1>
+        <p class="hero-lead" style="margin-left: 0">
+          Sistema web para digitalizar el control de asistencia de aprendices del SENA — Centro de
+          Procesos Industriales y Construcción (CPIC). Descripción alineada al README y al código del
+          repositorio.
+        </p>
+        <p>
+          <a class="btn btn-primary" href="manual-tecnico.html#instalacion-ejecucion">Instalación y ejecución</a>
+          <a class="btn btn-secondary" href="manual-usuario.html">Manual de usuario</a>
+          <a class="btn btn-secondary" href="manual-tecnico.html">Manual técnico</a>
+        </p>
+      </div>
+
+      <section class="section" id="metadatos">
+        <h2>Metadatos del proyecto</h2>
+        <div class="table-wrap">
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <th scope="row">Nombre</th>
+                <td>QUORUM</td>
+              </tr>
+              <tr>
+                <th scope="row">Cliente / contexto</th>
+                <td>SENA — CPIC (según documentación del proyecto)</td>
+              </tr>
+              <tr>
+                <th scope="row">Idioma UI</th>
+                <td>Español (Colombia)</td>
+              </tr>
+              <tr>
+                <th scope="row">Repositorio</th>
+                <td>Aplicación dividida en <code>quorum-frontend</code> y <code>quorum-backend</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="stack">
+        <h2>Stack tecnológico (implementado)</h2>
+        <ul class="pill-list">
+          <li><strong>Frontend:</strong> Next.js 14 (App Router), TypeScript estricto, Tailwind CSS, fuente Geist, Lucide React, Sonner (notificaciones), Axios.</li>
+          <li><strong>Backend:</strong> Laravel 12, PHP 8.2.</li>
+          <li><strong>Base de datos:</strong> MySQL 8 (entorno típico XAMPP).</li>
+          <li><strong>API:</strong> REST JSON; autenticación SPA con <strong>Laravel Sanctum</strong> (cookies stateful).</li>
+          <li><strong>Reportes:</strong> Excel mediante plantilla <code>storage/app/plantilla_asistencia.xlsx</code> (PhpSpreadsheet en backend).</li>
+        </ul>
+      </section>
+
+      <section class="section" id="arquitectura">
+        <h2>Arquitectura lógica</h2>
+        <div class="mermaid-box" aria-label="Diagrama de capas">
+┌─────────────────┐     HTTPS/JSON      ┌──────────────────┐
+│   Navegador     │ ◄─────────────────► │  Laravel API     │
+│   Next.js SPA   │    Sanctum cookies   │  PHP + MySQL     │
+└─────────────────┘                      └────────┬─────────┘
+                                                  │
+                                                  ▼
+                                          ┌───────────────┐
+                                          │    MySQL 8    │
+                                          └───────────────┘
+        </div>
+        <p>
+          El frontend consume la API en <code>http://localhost:8000</code> (configurado en
+          <code>quorum-frontend/services/api.ts</code>). Las reglas de negocio y permisos se
+          aplican en el servidor (policies, middleware, incluido <code>EnsureTotpSessionOk</code> para
+          sesiones staff con 2FA completado).
+        </p>
+      </section>
+
+      <section class="section" id="roles">
+        <h2>Roles de usuario</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Administrador</h3>
+            <p>Gestión de usuarios, fichas, centros (vinculados a regional SENA), programas con tipo de formación, configuración, festivos, auditoría y catálogos según API.</p>
+          </div>
+          <div class="card">
+            <h3>Coordinador académico</h3>
+            <p>Consulta y seguimiento ampliado vía rutas <code>/api/coordinador/*</code> y vistas asociadas.</p>
+          </div>
+          <div class="card">
+            <h3>Instructor / Gestor de grupo</h3>
+            <p>Toma de asistencia, historial de fichas asignadas, exportación Excel cuando corresponda.</p>
+          </div>
+          <div class="card">
+            <h3>Aprendiz</h3>
+            <p>Solo lectura de su historial; login unificado con correo y contraseña (sin 2FA).</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="rutas">
+        <h2>Superficie de la aplicación</h2>
+        <p>
+          Listado de rutas Next.js presentes en <code>quorum-frontend/app/</code>. El detalle operativo
+          está en el <a href="manual-usuario.html#rutas-ui">manual de usuario</a>.
+        </p>
+        <div class="table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Ruta</th>
+                <th>Módulo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/login</code></td>
+                <td>Login único (correo + contraseña + reCAPTCHA)</td>
+              </tr>
+              <tr>
+                <td><code>/recuperar</code>, <code>/reset</code></td>
+                <td>Recuperación de contraseña</td>
+              </tr>
+              <tr>
+                <td><code>/2fa/*</code></td>
+                <td>Dos factores TOTP</td>
+              </tr>
+              <tr>
+                <td><code>/dashboard</code></td>
+                <td>Panel</td>
+              </tr>
+              <tr>
+                <td><code>/fichas</code>, <code>/fichas/nueva</code>, <code>/fichas/[id]</code></td>
+                <td>Fichas de caracterización</td>
+              </tr>
+              <tr>
+                <td><code>/usuarios</code></td>
+                <td>Usuarios (admin)</td>
+              </tr>
+              <tr>
+                <td><code>/asistencia/tomar</code>, <code>/asistencia/calendario</code>, <code>/asistencia/historial</code></td>
+                <td>Asistencia</td>
+              </tr>
+              <tr>
+                <td><code>/evidencias</code></td>
+                <td>Evidencias de excusas</td>
+              </tr>
+              <tr>
+                <td><code>/asistencia/auditoria</code></td>
+                <td>Auditoría</td>
+              </tr>
+              <tr>
+                <td><code>/coordinador</code></td>
+                <td>Coordinador</td>
+              </tr>
+              <tr>
+                <td><code>/mi-historial</code></td>
+                <td>Aprendiz</td>
+              </tr>
+              <tr>
+                <td><code>/configuracion</code></td>
+                <td>Configuración y festivos</td>
+              </tr>
+              <tr>
+                <td><code>/admin/centros</code>, <code>/admin/programas</code></td>
+                <td>Catálogos admin</td>
+              </tr>
+              <tr>
+                <td><code>/perfil</code></td>
+                <td>Perfil</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <h2>API REST (grupos)</h2>
+        <p>Definición en <code>quorum-backend/routes/api.php</code>:</p>
+        <ul class="pill-list">
+          <li><code>GET /api/ping</code> — comprobación de vida.</li>
+          <li><code>/api/auth/*</code> — login, logout, me, 2FA, recuperación y reset.</li>
+          <li>Tras autenticación y TOTP de sesión: dashboard, usuarios, macrorregiones, regionales, fichas, asistencia, calendario, evidencias, reportes Excel, coordinador, configuración, festivos, historial actividad, admin centros/programas, auditoría.</li>
+          <li><code>POST /api/auth/login-aprendiz</code> — deprecado (410); usar <code>POST /api/auth/login</code>.</li>
+          <li><code>GET /api/mi-historial</code> — aprendiz autenticado.</li>
+          <li><code>PATCH /api/perfil/contrasena</code> — cambio de contraseña en perfil.</li>
+        </ul>
+      </section>
+
+      <section class="section" id="diferenciadores">
+        <h2>Diferenciadores frente a Excel suelto</h2>
+        <ul class="pill-list">
+          <li>Una sola fuente de verdad en MySQL con políticas por rol.</li>
+          <li>Trazabilidad de sesiones y registros de asistencia; respaldos y auditoría según tablas del sistema.</li>
+          <li>Salida a plantilla Excel CPIC homogénea para cierre de periodo.</li>
+          <li>Flujo de aprendiz aislado: solo ve sus propios datos.</li>
+        </ul>
+      </section>
+
+      <section class="section" id="siguiente">
+        <h2>Siguiente paso</h2>
+        <p>
+          Para instalar y probar en local, sigue la sección
+          <a href="manual-tecnico.html#instalacion-ejecucion"><strong>Instalación y ejecución</strong></a> del
+          manual técnico.
+        </p>
+      </section>
+    </main>
+
+    <footer class="doc-footer">
+      <p>QUORUM — SENA CPIC · Documentación de producto · 2026</p>
+    </footer>
+    <script src="assets/docs.js" defer></script>
+  </body>
+</html>

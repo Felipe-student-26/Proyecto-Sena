@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manual de usuario — QUORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/quorum-docs.css" />
+  </head>
+  <body>
+    <a class="doc-skip" href="#contenido">Ir al contenido</a>
+    <header class="doc-header">
+      <div class="doc-header-inner">
+        <div class="doc-brand">
+          <img
+            class="doc-brand-wordmark"
+            src="assets/wordmark-quorum.png"
+            width="280"
+            height="84"
+            alt="Quorum"
+            decoding="async"
+          />
+          <span class="doc-brand-text">
+            <span class="doc-brand-suffix"> — Manual de usuario</span>
+          </span>
+        </div>
+        <button type="button" class="doc-nav-toggle" aria-expanded="false" aria-controls="doc-nav">
+          Menú
+        </button>
+        <nav id="doc-nav" class="doc-nav" aria-label="Principal">
+          <a href="ventas.html" data-doc="ventas.html">Ventas</a>
+          <a href="producto.html" data-doc="producto.html">Producto</a>
+          <a href="manual-usuario.html" data-doc="manual-usuario.html">Manual usuario</a>
+          <a href="manual-tecnico.html" data-doc="manual-tecnico.html">Manual técnico</a>
+          <a href="manual.html" data-doc="manual.html">Índice manuales</a>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Tema claro/oscuro">
+            Tema
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="doc-main">
+      <div class="hero" style="text-align: left; padding-top: 1rem">
+        <h1>Manual de usuario</h1>
+        <p class="hero-lead" style="margin-left: 0">
+          QUORUM — Sistema de control de asistencia (SENA CPIC). Guía para administradores,
+          coordinadores, instructores, gestores de grupo y aprendices.
+        </p>
+        <p>
+          <a class="btn btn-secondary" href="manual-tecnico.html#instalacion-ejecucion">Instalación del software</a>
+          <a class="btn btn-secondary" href="manual.html">Índice de manuales</a>
+        </p>
+      </div>
+
+      <div class="manual-layout">
+        <nav class="manual-toc" aria-label="Índice del manual">
+          <strong>Índice</strong>
+          <ul>
+            <li><a href="#introduccion">Introducción</a></li>
+            <li><a href="#primer-acceso">Primer acceso</a></li>
+            <li><a href="#rutas-ui">Pantallas de la aplicación</a></li>
+            <li><a href="#guia-pantallas">Guía por pantalla</a></li>
+            <li><a href="#por-rol">Operación por rol</a></li>
+            <li><a href="#crud">Funciones principales</a></li>
+            <li><a href="#asistencia-tipos">Tipos de asistencia</a></li>
+            <li><a href="#glosario">Glosario</a></li>
+            <li><a href="#troubleshooting">Problemas frecuentes</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+          </ul>
+        </nav>
+
+        <div class="manual-body">
+          <section id="introduccion" class="section">
+            <h2>Introducción</h2>
+            <p>
+              QUORUM digitaliza el registro y seguimiento de asistencia de aprendices vinculado a
+              <strong>fichas de caracterización</strong>. Sustituye controles dispersos en papel o
+              hojas de cálculo sueltas por una base centralizada, con roles (administrador,
+              coordinador, instructor, gestor de grupo, aprendiz) y reglas aplicadas en el servidor.
+            </p>
+            <p><strong>Qué facilita en la práctica:</strong></p>
+            <ul class="pill-list">
+              <li>Inicio de sesión único: correo, contraseña y verificación reCAPTCHA v3.</li>
+              <li>Personal con verificación en dos pasos (2FA TOTP) cuando corresponde.</li>
+              <li>Gestión de fichas, instructores, aprendices e importación desde Excel.</li>
+              <li>Toma de asistencia, calendario de clases y consulta de evidencias de excusas.</li>
+              <li>Historial / matriz por ficha y panel de coordinación.</li>
+              <li>Generación de reporte Excel CPIC a partir de plantilla institucional.</li>
+              <li>Catálogos SENA (macrorregiones, regionales, centros y programas con tipo de formación).</li>
+              <li>Configuración, días festivos y auditoría de asistencia (según rol).</li>
+            </ul>
+          </section>
+
+          <section id="primer-acceso" class="section">
+            <h2>Primer acceso</h2>
+            <ul>
+              <li>
+                <strong>Todos los roles</strong> usan la misma pantalla <code>/login</code>: correo
+                institucional, contraseña y reCAPTCHA. No hay pestañas separadas para staff y aprendiz.
+              </li>
+              <li>
+                <strong>Personal (admin, coordinador, instructor, gestor):</strong> tras el login
+                puede solicitarse configurar o verificar 2FA (<code>/2fa/configurar</code>,
+                <code>/2fa/verificar</code>). Luego accede al dashboard y al menú según su rol.
+              </li>
+              <li>
+                <strong>Aprendiz:</strong> usa el mismo formulario <code>/login</code> (correo +
+                contraseña). Tras iniciar sesión va a <code>/mi-historial</code>. No usa 2FA. El
+                administrador debe asignarle contraseña en <code>/usuarios</code>; tras el seed de
+                prueba el aprendiz viene sin contraseña en base de datos.
+              </li>
+              <li>
+                <strong>Recuperación de contraseña (staff):</strong> enlace desde
+                <code>/recuperar</code>; el correo lleva a <code>/reset</code> para definir una nueva
+                contraseña.
+              </li>
+              <li>
+                Si la cuenta está inactiva o no tiene permiso sobre un módulo, el sistema muestra un
+                mensaje o impide el acceso a esa pantalla.
+              </li>
+            </ul>
+            <p class="note">
+              Para credenciales de prueba y notas de entorno de desarrollo, consulta el
+              <a href="manual-tecnico.html#usuarios-prueba">manual técnico</a>.
+            </p>
+          </section>
+
+          <section id="rutas-ui" class="section">
+            <h2>Pantallas de la aplicación</h2>
+            <p>Resumen de rutas en el navegador (menú lateral según rol):</p>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Ruta</th>
+                    <th>Quién la usa</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>/login</code></td>
+                    <td>Todos</td>
+                    <td>Inicio de sesión (correo + contraseña + reCAPTCHA).</td>
+                  </tr>
+                  <tr>
+                    <td><code>/recuperar</code>, <code>/reset</code></td>
+                    <td>Staff</td>
+                    <td>Recuperación de contraseña.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/2fa/configurar</code>, <code>/2fa/verificar</code></td>
+                    <td>Staff</td>
+                    <td>Configuración y verificación 2FA.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/dashboard</code></td>
+                    <td>Staff</td>
+                    <td>Panel principal por rol.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/fichas</code>, <code>/fichas/nueva</code>, <code>/fichas/[id]</code></td>
+                    <td>Admin</td>
+                    <td>Fichas de caracterización.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/usuarios</code></td>
+                    <td>Admin</td>
+                    <td>Gestión de usuarios.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/admin/centros</code></td>
+                    <td>Admin</td>
+                    <td>Centros de formación vinculados a una regional SENA (menú activo).</td>
+                  </tr>
+                  <tr>
+                    <td><code>/admin/programas</code></td>
+                    <td>Admin</td>
+                    <td>Programas de formación con tipo (técnico, tecnólogo, operario, auxiliar, especialización, complementaria).</td>
+                  </tr>
+                  <tr>
+                    <td><code>/asistencia/tomar</code></td>
+                    <td>Instructor, gestor</td>
+                    <td>Tomar asistencia del día.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/asistencia/calendario</code></td>
+                    <td>Instructor, gestor</td>
+                    <td>Calendario de clases / sesiones.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/asistencia/historial</code></td>
+                    <td>Varios staff</td>
+                    <td>Matriz de asistencia por ficha.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/asistencia/auditoria</code></td>
+                    <td>Admin</td>
+                    <td>Auditoría de registros de asistencia.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/evidencias</code></td>
+                    <td>Coordinador, instructor, gestor</td>
+                    <td>Evidencias de excusas.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/coordinador</code></td>
+                    <td>Admin, coordinador</td>
+                    <td>Panel de seguimiento académico.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/mi-historial</code></td>
+                    <td>Aprendiz</td>
+                    <td>Historial propio de asistencia.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/configuracion</code></td>
+                    <td>Admin</td>
+                    <td>Parámetros del sistema y días festivos.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/perfil</code></td>
+                    <td>Todos (según acceso)</td>
+                    <td>Perfil y cambio de contraseña.</td>
+                  </tr>
+                  <tr>
+                    <td><code>/centros-formacion</code></td>
+                    <td>—</td>
+                    <td>Ruta legacy; el menú usa <code>/admin/centros</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="guia-pantallas" class="section">
+            <h2>Guía por pantalla</h2>
+            <p>
+              Capturas en <code>assets/screenshots/</code> (ver <code>LEEME.txt</code>). Los pasos son
+              orientativos.
+            </p>
+
+            <h3 id="p-login">Inicio de sesión — <code>/login</code></h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/01-login.png"
+                alt="Pantalla de inicio de sesión QUORUM: correo, contraseña y reCAPTCHA en un solo formulario"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 1. Inicio de sesión — <code>/login</code>.</figcaption>
+            </figure>
+            <ol>
+              <li>Abre la URL del frontend en el navegador.</li>
+              <li>Ingresa correo y contraseña asignados por el administrador.</li>
+              <li>Completa la verificación reCAPTCHA y envía el formulario.</li>
+              <li>Staff: sigue el flujo 2FA si el sistema lo solicita. Aprendiz: va a Mi historial.</li>
+            </ol>
+
+            <h3>Recuperar y restablecer</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/02-recuperar.png"
+                alt="Pantalla para solicitar recuperación de contraseña"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 2. Recuperar contraseña — <code>/recuperar</code>.</figcaption>
+            </figure>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/03-reset.png"
+                alt="Pantalla para establecer nueva contraseña con token"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 3. Restablecer contraseña — <code>/reset</code>.</figcaption>
+            </figure>
+
+            <h3>2FA</h3>
+            <p class="note">
+              Configuración 2FA (<code>04-2fa-configurar.png</code>): opcional en
+              <code>assets/screenshots/</code>.
+            </p>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/05-2fa-verificar.png"
+                alt="Verificación de código 2FA TOTP"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 4. Verificación 2FA — <code>/2fa/verificar</code>.</figcaption>
+            </figure>
+
+            <h3>Dashboard</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/06-dashboard.png"
+                alt="Panel principal del dashboard por rol"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 5. Dashboard — <code>/dashboard</code>.</figcaption>
+            </figure>
+
+            <h3>Fichas</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/07-fichas.png"
+                alt="Listado de fichas de caracterización"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 6. Listado — <code>/fichas</code>.</figcaption>
+            </figure>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/08-ficha-nueva.png"
+                alt="Formulario de nueva ficha"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 7. Nueva ficha — <code>/fichas/nueva</code>.</figcaption>
+            </figure>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/09-ficha-detalle.png"
+                alt="Detalle de ficha con aprendices e instructores"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 8. Detalle — <code>/fichas/[id]</code>.</figcaption>
+            </figure>
+
+            <h3>Usuarios</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/10-usuarios.png"
+                alt="Gestión de usuarios"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 9. Usuarios — <code>/usuarios</code>.</figcaption>
+            </figure>
+
+            <h3>Asistencia</h3>
+            <p class="note">
+              <code>11-asistencia-tomar.png</code> (tomar asistencia) y
+              <code>19-calendario.png</code> (calendario): opcionales en screenshots.
+            </p>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/12-asistencia-historial.png"
+                alt="Historial de asistencia por ficha"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 10. Historial — <code>/asistencia/historial</code>.</figcaption>
+            </figure>
+            <p>
+              En <code>/asistencia/tomar</code> inicia o continúa la sesión del día, marca tipos de
+              asistencia y guarda. En <code>/asistencia/calendario</code> consulta las sesiones
+              programadas. En <code>/evidencias</code> revisa archivos de excusas cuando aplica.
+            </p>
+
+            <h3>Coordinador y auditoría</h3>
+            <p class="note">
+              Auditoría (<code>13-auditoria.png</code>) y evidencias (<code>20-evidencias.png</code>):
+              capturas opcionales.
+            </p>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/14-coordinador.png"
+                alt="Panel del coordinador"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 11. Coordinador — <code>/coordinador</code>.</figcaption>
+            </figure>
+
+            <h3>Aprendiz — Mi historial</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/15-mi-historial.png"
+                alt="Historial de asistencia del aprendiz"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 12. Mi historial — <code>/mi-historial</code>.</figcaption>
+            </figure>
+
+            <h3>Configuración y catálogos admin</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/16-configuracion.png"
+                alt="Configuración y días festivos"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 13. Configuración — <code>/configuracion</code>.</figcaption>
+            </figure>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/17-centros-formacion.png"
+                alt="Administración de centros de formación"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>
+                Figura 14. Centros (referencia visual; menú actual:
+                <code>/admin/centros</code> con selector de regional SENA).
+              </figcaption>
+            </figure>
+            <p class="note">
+              Programas de formación: <code>/admin/programas</code> — captura opcional
+              <code>21-admin-programas.png</code>.
+            </p>
+
+            <h3>Perfil</h3>
+            <figure class="doc-figure">
+              <img
+                src="assets/screenshots/18-perfil.png"
+                alt="Perfil de usuario"
+                class="doc-screenshot"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>Figura 15. Perfil — <code>/perfil</code>.</figcaption>
+            </figure>
+          </section>
+
+          <section id="por-rol" class="section">
+            <h2>Operación por rol</h2>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Rol</th>
+                    <th>Acciones típicas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Administrador</td>
+                    <td>
+                      Usuarios, fichas, centros y programas (<code>/admin/*</code>), configuración,
+                      festivos, auditoría de asistencia, historial de actividad.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Coordinador</td>
+                    <td>
+                      Panel coordinador, búsqueda de aprendices, estadísticas, historial por ficha,
+                      evidencias; consulta sin mutaciones reservadas a admin.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Instructor / Gestor</td>
+                    <td>
+                      Tomar asistencia, calendario, historial de fichas asignadas, evidencias,
+                      descarga Excel cuando la política lo permite.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Aprendiz</td>
+                    <td>Solo <code>/mi-historial</code> y cambio de contraseña en perfil si aplica.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note">El menú lateral (rail oscuro, expandible desde la barra superior) solo muestra lo permitido para tu rol. Etiquetas actuales:</p>
+            <ul class="pill-list">
+              <li><strong>Admin:</strong> Dashboard, Usuarios, Fichas, Centros de formación, Programas de formación, Historial de asistencia, Auditoría de asistencia, Vista coordinador, Configuración.</li>
+              <li><strong>Coordinador:</strong> Dashboard, Vista coordinador, Historial de asistencia, Evidencias de excusas.</li>
+              <li><strong>Instructor / Gestor:</strong> Dashboard, Tomar asistencia, Mi calendario, Historial, Evidencias de excusas.</li>
+              <li><strong>Aprendiz:</strong> Mi historial, Mi perfil.</li>
+            </ul>
+          </section>
+
+          <section id="crud" class="section">
+            <h2>Funciones principales</h2>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Área</th>
+                    <th>Dónde en la app</th>
+                    <th>Qué puedes hacer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Usuarios</td>
+                    <td><code>/usuarios</code></td>
+                    <td>Crear, editar, desactivar y reactivar usuarios (admin).</td>
+                  </tr>
+                  <tr>
+                    <td>Fichas</td>
+                    <td><code>/fichas*</code></td>
+                    <td>Alta y edición de fichas; instructores; aprendices; importar Excel.</td>
+                  </tr>
+                  <tr>
+                    <td>Asistencia</td>
+                    <td><code>/asistencia/tomar</code></td>
+                    <td>Abrir sesión del día, registrar presente/falla/parcial/excusa, guardar.</td>
+                  </tr>
+                  <tr>
+                    <td>Centros</td>
+                    <td><code>/admin/centros</code></td>
+                    <td>Alta, edición y desactivación de centros; cada centro se asocia a una regional SENA (admin).</td>
+                  </tr>
+                  <tr>
+                    <td>Programas</td>
+                    <td><code>/admin/programas</code></td>
+                    <td>Catálogo de programas con código, nombre y tipo de formación; filtro por tipo y estado (admin).</td>
+                  </tr>
+                  <tr>
+                    <td>Festivos</td>
+                    <td><code>/configuracion</code></td>
+                    <td>Definir días no hábiles para el cómputo de asistencia.</td>
+                  </tr>
+                  <tr>
+                    <td>Reporte Excel</td>
+                    <td>Historial / detalle de ficha</td>
+                    <td>Descargar formato CPIC (requiere plantilla en el servidor).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="asistencia-tipos" class="section">
+            <h2>Tipos de asistencia</h2>
+            <p>Colores en la interfaz al marcar asistencia:</p>
+            <p>
+              <span class="badge-asist presente">Presente</span>
+              <span class="badge-asist falla">Falla</span>
+              <span class="badge-asist parcial">Parcial</span>
+              <span class="badge-asist excusa">Excusa</span>
+            </p>
+          </section>
+
+          <section id="glosario" class="section">
+            <h2>Glosario</h2>
+            <ul>
+              <li><strong>Aprendiz:</strong> persona en formación en el SENA.</li>
+              <li><strong>Instructor:</strong> quien imparte la formación.</li>
+              <li><strong>Ficha de caracterización:</strong> grupo identificado por número de ficha.</li>
+              <li><strong>Ambiente de formación:</strong> espacio donde ocurre la formación.</li>
+            </ul>
+          </section>
+
+          <section id="troubleshooting" class="section">
+            <h2>Problemas frecuentes (uso)</h2>
+            <ul class="pill-list">
+              <li>
+                <strong>No puedo iniciar sesión:</strong> verifica correo y contraseña; si eres staff,
+                completa 2FA. Contacta al administrador si la cuenta está inactiva.
+              </li>
+              <li>
+                <strong>reCAPTCHA no deja continuar:</strong> en producción el administrador debe
+                configurar las claves del sitio; en desarrollo ver el
+                <a href="manual-tecnico.html#desarrollo-local">manual técnico</a>.
+              </li>
+              <li>
+                <strong>No veo un menú o pantalla:</strong> tu rol puede no tener permiso; el
+                administrador asigna roles en <code>/usuarios</code>.
+              </li>
+              <li>
+                <strong>No descarga el Excel:</strong> el administrador debe tener la plantilla CPIC en
+                el servidor (ver manual técnico).
+              </li>
+              <li>
+                <strong>Correo de recuperación no llega:</strong> revisa bandeja de spam o solicita al
+                administrador que verifique el correo del sistema.
+              </li>
+              <li>
+                <strong>Aprendiz no puede entrar:</strong> el login unificado exige contraseña; pide al
+                administrador que te la asigne en <code>/usuarios</code> (no uses documento en lugar de
+                contraseña).
+              </li>
+            </ul>
+          </section>
+
+          <section id="conclusiones" class="section">
+            <h2>Conclusiones</h2>
+            <p>
+              QUORUM centraliza el registro de asistencia, la trazabilidad por ficha y la salida a
+              Excel institucional. Este manual describe el uso desde la interfaz; para instalar el
+              software o integrar con la API, usa el
+              <a href="manual-tecnico.html">manual técnico</a>.
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="doc-footer">
+      <p>QUORUM — SENA CPIC · Manual de usuario · 2026</p>
+    </footer>
+    <script src="assets/docs.js" defer></script>
+  </body>
+</html>

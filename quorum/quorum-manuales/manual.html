@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manuales — QUORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/quorum-docs.css" />
+  </head>
+  <body>
+    <a class="doc-skip" href="#contenido">Ir al contenido</a>
+    <header class="doc-header">
+      <div class="doc-header-inner">
+        <div class="doc-brand">
+          <img
+            class="doc-brand-wordmark"
+            src="assets/wordmark-quorum.png"
+            width="280"
+            height="84"
+            alt="Quorum"
+            decoding="async"
+          />
+          <span class="doc-brand-text">
+            <span class="doc-brand-suffix"> — Manuales</span>
+          </span>
+        </div>
+        <button type="button" class="doc-nav-toggle" aria-expanded="false" aria-controls="doc-nav">
+          Menú
+        </button>
+        <nav id="doc-nav" class="doc-nav" aria-label="Principal">
+          <a href="ventas.html" data-doc="ventas.html">Ventas</a>
+          <a href="producto.html" data-doc="producto.html">Producto</a>
+          <a href="manual-usuario.html" data-doc="manual-usuario.html">Manual usuario</a>
+          <a href="manual-tecnico.html" data-doc="manual-tecnico.html">Manual técnico</a>
+          <a href="manual.html" data-doc="manual.html">Índice manuales</a>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Tema claro/oscuro">
+            Tema
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="doc-main">
+      <div class="hero" style="text-align: left; padding-top: 1rem">
+        <h1>Documentación QUORUM</h1>
+        <p class="hero-lead" style="margin-left: 0">
+          Elige el manual según tu necesidad: uso diario de la aplicación o instalación, API y
+          desarrollo.
+        </p>
+      </div>
+
+      <section class="section">
+        <div class="card-grid manual-hub-grid">
+          <div class="card">
+            <h3>Manual de usuario</h3>
+            <p>
+              Pantallas, roles, primer acceso, toma de asistencia, coordinación y glosario SENA.
+              Para administradores, instructores, coordinadores, gestores y aprendices.
+            </p>
+            <p>
+              <a class="btn btn-primary" href="manual-usuario.html">Abrir manual de usuario</a>
+            </p>
+          </div>
+          <div class="card">
+            <h3>Manual técnico</h3>
+            <p>
+              Instalación del repositorio, variables de entorno, bypass de desarrollo, API REST,
+              diccionario de datos y resolución de problemas técnicos.
+            </p>
+            <p>
+              <a class="btn btn-primary" href="manual-tecnico.html">Abrir manual técnico</a>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="doc-footer">
+      <p>QUORUM — SENA CPIC · Índice de manuales · 2026</p>
+    </footer>
+    <script src="assets/docs.js" defer></script>
+  </body>
+</html>

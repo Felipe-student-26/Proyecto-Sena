@@ -1,0 +1,49 @@
+Al entrar al Login del proyecto y hacer scroll hacia abajo se vera un menu para acceso rápido de pruebas a cada usuario (solo desarrollo).
+
+Notas:
+- Camino A (importar Base de datos/quorum.sql): en local activa TOTP_BYPASS_LOCAL=true y RECAPTCHA_BYPASS_LOCAL=true en el backend, y NEXT_PUBLIC_RECAPTCHA_BYPASS_LOCAL=true en el frontend (el dump trae 2FA ya verificado).
+- Camino B (php artisan migrate --seed): las mismas cuentas y contraseñas.
+
+
+---
+
+
+Rol: Administrador
+
+Correo electrónico: andresfelipeorozcopiedrahita@gmail.com
+
+Contraseña: Admin123!
+
+---
+
+Rol: Coordinador
+
+Correo electrónico: sbecerra@sena.edu.co
+
+Contraseña: Admin123!
+
+---
+
+Rol: Instructor
+
+Correo electrónico: documentosorozco25@gmail.com
+
+Contraseña: Admin123!
+
+---
+
+Rol: Gestor
+
+Correo electrónico: mgomez@sena.edu.co
+
+Contraseña: Admin123!
+
+---
+
+
+Rol: Aprendiz
+
+Correo electrónico: andres@aprendiz.sena.edu.co
+
+Contraseña: 33333333
+

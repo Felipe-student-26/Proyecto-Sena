@@ -1,0 +1,94 @@
+================================================================================
+QUORUM — Material comercial y manuales (carpeta lista para comprimir / compartir)
+================================================================================
+
+¿ESTA CARPETA TIENE TODO PARA "EJECUTARLO" EN OTRO PC?
+--------------------------------------------------------------------------------
+  SI — para VER este sitio web estático (presentación + manuales en HTML):
+      basta con descomprimir la carpeta y abrir index.html o ventas.html
+      en un navegador. No hace falta Node, PHP ni MySQL para ESTE material.
+
+  NO — esto NO es la aplicación QUORUM (Next.js + Laravel). Para instalar y
+      ejecutar el software real necesitas el proyecto completo
+      (quorum-frontend, quorum-backend, MySQL, etc.) según el manual técnico.
+
+--------------------------------------------------------------------------------
+CÓMO ABRIRLO (Windows, Mac o Linux)
+--------------------------------------------------------------------------------
+  1. Descomprime el ZIP manteniendo la estructura de carpetas.
+  2. Doble clic en:
+       index.html           → entra y redirige a ventas.html
+       ventas.html          → presentación comercial
+       producto.html        → ficha del producto / arquitectura
+       manual.html          → índice: elige manual de usuario o técnico
+       manual-usuario.html  → uso de la aplicación (roles, pantallas)
+       manual-tecnico.html  → instalación, API, variables de entorno
+  3. Si las imágenes no cargan o el navegador bloquea scripts al usar file://,
+     abre una terminal EN ESTA CARPETA y ejecuta por ejemplo:
+       python -m http.server 8080
+     Luego en el navegador: http://localhost:8080
+
+--------------------------------------------------------------------------------
+CONTENIDO DEL PAQUETE (todo lo necesario para el sitio estático)
+--------------------------------------------------------------------------------
+  index.html              Punto de entrada (redirige a ventas.html)
+  ventas.html             Landing comercial
+  producto.html           Ficha técnica del software
+  manual.html             Índice de manuales (usuario + técnico)
+  manual-usuario.html     Manual de usuario (pantallas y roles)
+  manual-tecnico.html     Manual técnico (instalación, API, desarrollo)
+  LEEME.txt               Este archivo
+  assets/
+    quorum-docs.css       Estilos
+    docs.js               Menú móvil, tema claro/oscuro, índice del manual
+    logo-quorum.png       Ícono de marca
+    wordmark-quorum.png   Marca tipográfica horizontal
+    screenshots/          Capturas de pantalla (PNG) usadas por el manual
+
+--------------------------------------------------------------------------------
+CAPTURAS (nombres en assets/screenshots/)
+--------------------------------------------------------------------------------
+  01-login.png              /login (formulario único: correo + contraseña)
+  02-recuperar.png          /recuperar
+  03-reset.png              /reset
+  04-2fa-configurar.png     /2fa/configurar   [opcional]
+  05-2fa-verificar.png      /2fa/verificar
+  06-dashboard.png          /dashboard
+  07-fichas.png             /fichas
+  08-ficha-nueva.png        /fichas/nueva
+  09-ficha-detalle.png      /fichas/[id]
+  10-usuarios.png           /usuarios
+  11-asistencia-tomar.png   /asistencia/tomar [opcional]
+  12-asistencia-historial.png
+  13-auditoria.png          /asistencia/auditoria [opcional]
+  14-coordinador.png        /coordinador
+  15-mi-historial.png       /mi-historial
+  16-configuracion.png      /configuracion
+  17-centros-formacion.png  referencia visual (menú activo: /admin/centros; centros con regional SENA)
+  18-perfil.png             /perfil
+
+  Opcionales (módulos nuevos; el manual enlaza si existen):
+  19-calendario.png         /asistencia/calendario
+  20-evidencias.png         /evidencias
+  21-admin-programas.png    /admin/programas (programas con tipo de formación)
+
+  El manual enlaza cada PNG que exista. Las notas del HTML indican capturas pendientes.
+
+--------------------------------------------------------------------------------
+MARCA (cabecera de las páginas HTML)
+--------------------------------------------------------------------------------
+  assets/wordmark-quorum.png — copia de quorum-frontend/public/branding/
+  wordmark_quorum.png. Altura máxima en cabecera: ~40 px.
+
+--------------------------------------------------------------------------------
+AL COMPRIMIR EN ZIP
+--------------------------------------------------------------------------------
+  Incluye toda la carpeta Quorum-manual_y_presentacion tal cual (con assets/).
+  No hace falta incluir el resto del repositorio para solo compartir esta documentación.
+
+--------------------------------------------------------------------------------
+PARA INSTALAR LA APLICACIÓN QUORUM (fuera de este paquete)
+--------------------------------------------------------------------------------
+  Sigue manual-tecnico.html (sección Instalación) y el README.md del repositorio.
+
+================================================================================

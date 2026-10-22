@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QUORUM — Control de asistencia SENA CPIC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/quorum-docs.css" />
+  </head>
+  <body>
+    <a class="doc-skip" href="#contenido">Ir al contenido</a>
+    <header class="doc-header">
+      <div class="doc-header-inner">
+        <div class="doc-brand">
+          <img
+            class="doc-brand-wordmark"
+            src="assets/wordmark-quorum.png"
+            width="280"
+            height="84"
+            alt="Quorum"
+            decoding="async"
+          />
+        </div>
+        <button type="button" class="doc-nav-toggle" aria-controls="doc-nav">Menú</button>
+        <nav id="doc-nav" class="doc-nav" aria-label="Principal">
+          <a href="ventas.html" data-doc="ventas.html">Ventas</a>
+          <a href="producto.html" data-doc="producto.html">Producto</a>
+          <a href="manual-usuario.html" data-doc="manual-usuario.html">Manual usuario</a>
+          <a href="manual-tecnico.html" data-doc="manual-tecnico.html">Manual técnico</a>
+          <a href="manual.html" data-doc="manual.html">Índice manuales</a>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Tema claro/oscuro">
+            Tema
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="doc-main">
+      <div class="hero">
+        <h1>Menos retrabajo en el cierre de asistencia. Más control en cada ficha.</h1>
+        <p class="hero-lead">
+          QUORUM es una aplicación web que ya integra roles de administración, coordinación,
+          instructores y aprendices, toma de asistencia, historial, reporte Excel sobre plantilla CPIC
+          y seguridad con Sanctum, reCAPTCHA y 2FA para el personal.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="manual-tecnico.html#instalacion-ejecucion">Cómo instalar y ejecutar</a>
+          <a class="btn btn-secondary" href="manual-usuario.html">Manual de usuario</a>
+          <a class="btn btn-secondary" href="producto.html">Ver ficha técnica</a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--gris-medio)">
+          Material independiente del código — comprobar funcionalidades en su despliegue.
+        </p>
+      </div>
+
+      <section class="section" id="problema">
+        <h2>El problema que resolvemos</h2>
+        <ul class="pill-list">
+          <li>
+            Listas en papel o archivos Excel por instructor, difíciles de consolidar al generar el
+            informe oficial.
+          </li>
+          <li>Pérdida de trazabilidad y riesgo de inconsistencias entre versiones.</li>
+          <li>Coordinación académica con poca visibilidad oportuna del estado de asistencia por ficha.</li>
+        </ul>
+      </section>
+
+      <section class="section" id="solucion">
+        <h2>La solución QUORUM</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Centralización</h3>
+            <p>
+              Una base MySQL y una API Laravel alimentan todas las pantallas Next.js: fichas,
+              aprendices, sesiones y registros de asistencia en un solo lugar.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Roles claros</h3>
+            <p>
+              Administrador, coordinador, instructor, gestor de grupo y aprendiz, con permisos
+              aplicados en el servidor (policies y middleware), no solo en la interfaz.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Reporte institucional</h3>
+            <p>
+              Generación de Excel CPIC a partir de <code>plantilla_asistencia.xlsx</code>, alineada al
+              flujo real del backend.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Seguridad operativa</h3>
+            <p>
+              Sanctum para sesión SPA, reCAPTCHA en login, 2FA TOTP para staff, recuperación de
+              contraseña por correo y control de intentos de acceso.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="roles-valor">
+        <h2>Valor por perfil</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Administración</h3>
+            <p>Configura el sistema, fichas, usuarios, centros y programas SENA, festivos y auditoría desde paneles dedicados.</p>
+          </div>
+          <div class="card">
+            <h3>Coordinación</h3>
+            <p>Supervisa fichas y asistencias con vistas de consulta pensadas para auditoría académica.</p>
+          </div>
+          <div class="card">
+            <h3>Instructores y gestores</h3>
+            <p>Registran asistencia en sesiones, corrigen lo permitido y acceden al historial de sus fichas.</p>
+          </div>
+          <div class="card">
+            <h3>Aprendices</h3>
+            <p>Consultan su propio historial con login unificado (correo y contraseña), sin 2FA, con aislamiento de datos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="como-funciona">
+        <h2>Cómo funciona (tres pasos)</h2>
+        <div class="card-grid">
+          <div class="card">
+            <h3>1. Configurar</h3>
+            <p>Catálogos SENA (macrorregiones, regionales, centros y programas con tipo), fichas, instructores y aprendices (incluye importación desde Excel en el flujo admin).</p>
+          </div>
+          <div class="card">
+            <h3>2. Registrar</h3>
+            <p>Sesiones de asistencia con tipos Presente, Falla, Parcial y Excusa según la implementación actual.</p>
+          </div>
+          <div class="card">
+            <h3>3. Consolidar</h3>
+            <p>Historial y matrices por ficha, panel coordinador y descarga del Excel CPIC cuando la plantilla está instalada.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="confianza">
+        <h2>Stack que puede revisar su equipo de TI</h2>
+        <p>
+          Next.js 14, Laravel 12, PHP 8.2, MySQL 8, Sanctum. Código abierto en su repositorio; este
+          sitio es documentación estática y no reemplaza una prueba de aceptación en su entorno.
+        </p>
+      </section>
+
+      <section class="section faq" id="faq">
+        <h2>Preguntas frecuentes</h2>
+        <details>
+          <summary>¿Es una aplicación móvil nativa?</summary>
+          <p>
+            No. Es una aplicación web responsive: se usa en el navegador del computador o del celular,
+            coherente con el alcance documentado del proyecto.
+          </p>
+        </details>
+        <details>
+          <summary>¿Se integra con Sofia Plus u otros sistemas nacionales en tiempo real?</summary>
+          <p>
+            El producto está pensado como sistema independiente para control de asistencia; no como
+            sustituto ni conector en tiempo real con plataformas externas (ver límites de alcance en el
+            PRD del proyecto).
+          </p>
+        </details>
+        <details>
+          <summary>¿Los aprendices descargan el Excel CPIC?</summary>
+          <p>
+            En el diseño de roles del proyecto, el aprendiz consulta su historial; la exportación Excel
+            corresponde a perfiles con permiso en la API (admin, coordinador, instructor, gestor según
+            políticas).
+          </p>
+        </details>
+        <details>
+          <summary>¿Incluye calificaciones o notas?</summary>
+          <p>No. El alcance es control de asistencia y reportes asociados, no evaluación académica.</p>
+        </details>
+        <details>
+          <summary>¿Qué necesito para probarlo en local?</summary>
+          <p>
+            XAMPP con MySQL, Composer, Node.js 20+, plantilla Excel en el backend y variables de entorno
+            descritas en el
+            <a href="manual-tecnico.html#instalacion-ejecucion">manual técnico de instalación</a>.
+          </p>
+        </details>
+      </section>
+
+      <section class="section" id="cierre">
+        <h2>Hablemos de implementación o piloto</h2>
+        <p>
+          Contactanos en: andresfelipeorozcopiedrahita@gmail.com . Mientras
+          tanto, usa el manual para demostrar el sistema en una máquina de pruebas.
+        </p>
+        <div class="hero-cta" style="justify-content: flex-start">
+          <a class="btn btn-primary" href="manual-tecnico.html#instalacion-ejecucion">Guía de instalación</a>
+          <a class="btn btn-secondary" href="mailto:andresfelipeorozcopiedrahita@gmail.com">Correo de contacto</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="doc-footer">
+      <p>QUORUM — SENA CPIC · Presentación comercial · 2026</p>
+    </footer>
+    <script src="assets/docs.js" defer></script>
+  </body>
+</html>

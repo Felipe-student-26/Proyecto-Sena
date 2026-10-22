@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manual técnico — QUORUM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/quorum-docs.css" />
+  </head>
+  <body>
+    <a class="doc-skip" href="#contenido">Ir al contenido</a>
+    <header class="doc-header">
+      <div class="doc-header-inner">
+        <div class="doc-brand">
+          <img
+            class="doc-brand-wordmark"
+            src="assets/wordmark-quorum.png"
+            width="280"
+            height="84"
+            alt="Quorum"
+            decoding="async"
+          />
+          <span class="doc-brand-text">
+            <span class="doc-brand-suffix"> — Manual técnico</span>
+          </span>
+        </div>
+        <button type="button" class="doc-nav-toggle" aria-expanded="false" aria-controls="doc-nav">
+          Menú
+        </button>
+        <nav id="doc-nav" class="doc-nav" aria-label="Principal">
+          <a href="ventas.html" data-doc="ventas.html">Ventas</a>
+          <a href="producto.html" data-doc="producto.html">Producto</a>
+          <a href="manual-usuario.html" data-doc="manual-usuario.html">Manual usuario</a>
+          <a href="manual-tecnico.html" data-doc="manual-tecnico.html">Manual técnico</a>
+          <a href="manual.html" data-doc="manual.html">Índice manuales</a>
+          <button type="button" class="theme-toggle" data-theme-toggle title="Tema claro/oscuro">
+            Tema
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" class="doc-main">
+      <div class="hero" style="text-align: left; padding-top: 1rem">
+        <h1>Manual técnico</h1>
+        <p class="hero-lead" style="margin-left: 0">
+          Instalación, variables de entorno, API REST, arquitectura y resolución de problemas para
+          desarrolladores. Stack: Next.js 14 + Laravel 12 + MySQL 8.
+        </p>
+        <p>
+          <a class="btn btn-secondary" href="manual-usuario.html">Manual de usuario</a>
+        </p>
+      </div>
+
+      <div class="manual-layout">
+        <nav class="manual-toc" aria-label="Índice del manual">
+          <strong>Índice</strong>
+          <ul>
+            <li><a href="#requisitos">Requisitos</a></li>
+            <li><a href="#instalacion-ejecucion">Instalación</a></li>
+            <li><a href="#variables-entorno">Variables de entorno</a></li>
+            <li><a href="#desarrollo-local">Desarrollo local</a></li>
+            <li><a href="#usuarios-prueba">Usuarios de prueba</a></li>
+            <li><a href="#arquitectura-auth">Autenticación</a></li>
+            <li><a href="#rutas-ui">Rutas UI (referencia)</a></li>
+            <li><a href="#api-resumen">API REST</a></li>
+            <li><a href="#diccionario">Diccionario de datos</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+          </ul>
+        </nav>
+
+        <div class="manual-body">
+          <section id="requisitos" class="section">
+            <h2>Requisitos del entorno</h2>
+            <ul>
+              <li>XAMPP (o equivalente) con <strong>PHP 8.2</strong> y <strong>MySQL 8</strong>.</li>
+              <li><strong>Node.js 20+</strong> y npm.</li>
+              <li><strong>Composer 2.x</strong>.</li>
+              <li>Navegador actualizado (Chrome, Edge o Firefox).</li>
+            </ul>
+            <p class="note">
+              SMTP (<code>MAIL_*</code>) para recuperación de contraseña. reCAPTCHA en producción:
+              claves en backend y <code>NEXT_PUBLIC_RECAPTCHA_SITE_KEY</code> en el frontend.
+            </p>
+          </section>
+
+          <section id="instalacion-ejecucion" class="section">
+            <h2>Instalación y ejecución</h2>
+            <p>
+              Asume carpetas <code>quorum-backend</code> y <code>quorum-frontend</code> bajo
+              <code>quorum-codigo/</code> (paquete completo). Hay dos caminos para la base de datos;
+              <strong>no los mezcles</strong>.
+            </p>
+
+            <h3>Camino A (oficial): dump SQL</h3>
+            <ol>
+              <li>Inicia MySQL.</li>
+              <li>Crea la base vacía <code>quorum</code>.</li>
+              <li>Importa <code>Base de datos/quorum.sql</code> (phpMyAdmin o cliente MySQL).</li>
+              <li>
+                <strong>No</strong> ejecutes <code>php artisan migrate --seed</code> después del dump.
+              </li>
+            </ol>
+            <p class="note warn">
+              El dump trae usuarios con 2FA ya verificado. En local, pon
+              <code>TOTP_BYPASS_LOCAL=true</code> y <code>RECAPTCHA_BYPASS_LOCAL=true</code> en el
+              <code>.env</code> del backend, y <code>NEXT_PUBLIC_RECAPTCHA_BYPASS_LOCAL=true</code> en
+              el <code>.env.local</code> del frontend. Nunca en producción.
+            </p>
+
+            <h3>Backend (ambos caminos)</h3>
+            <pre class="code-block"><code>cd quorum-codigo/quorum-backend
+copy .env.example .env
+composer install
+php artisan key:generate
+php artisan serve</code></pre>
+            <p>
+              Camino B (sin dump): tras <code>key:generate</code>, ejecuta
+              <code>php artisan migrate --seed</code> y luego <code>php artisan serve</code>. Obtendrás
+              catálogos + 5 usuarios de prueba, sin las fichas extra del dump.
+            </p>
+            <p>API habitual: <strong>http://localhost:8000</strong></p>
+            <pre class="code-block"><code>GET http://localhost:8000/api/ping</code></pre>
+            <p>Respuesta esperada: <code>status: ok</code>.</p>
+
+            <h3>Plantilla Excel CPIC</h3>
+            <p>
+              El paquete ya incluye
+              <code>quorum-backend/storage/app/plantilla_asistencia.xlsx</code>. Sin ese archivo,
+              <code>GET /api/reportes/excel/{ficha}</code> falla.
+            </p>
+
+            <h3>Frontend</h3>
+            <pre class="code-block"><code>cd quorum-codigo/quorum-frontend
+npm install
+copy .env.example .env.local
+npm run dev</code></pre>
+            <p>
+              La URL base de la API está en <code>quorum-frontend/services/api.ts</code> (por defecto
+              <code>http://localhost:8000</code>). No uses <code>NEXT_PUBLIC_API_URL</code> en docs
+              nuevas: ya no figura en <code>.env.example</code> del frontend.
+            </p>
+
+            <h3>Orden de arranque</h3>
+            <ol>
+              <li>MySQL</li>
+              <li><code>php artisan serve</code></li>
+              <li><code>npm run dev</code></li>
+            </ol>
+          </section>
+
+          <section id="variables-entorno" class="section">
+            <h2>Variables de entorno</h2>
+            <h3>Backend (<code>quorum-backend/.env</code>)</h3>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Variable</th>
+                    <th>Notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>APP_URL</code></td>
+                    <td>URL de la API (p. ej. http://localhost:8000).</td>
+                  </tr>
+                  <tr>
+                    <td><code>FRONTEND_URL</code></td>
+                    <td>URL del SPA Next (sin barra final).</td>
+                  </tr>
+                  <tr>
+                    <td><code>SESSION_DOMAIN</code></td>
+                    <td>p. ej. <code>localhost</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>SANCTUM_STATEFUL_DOMAINS</code></td>
+                    <td>localhost:3000, localhost:3001, etc.</td>
+                  </tr>
+                  <tr>
+                    <td><code>DB_*</code></td>
+                    <td>Conexión MySQL.</td>
+                  </tr>
+                  <tr>
+                    <td><code>MAIL_*</code></td>
+                    <td>SMTP para recuperación de contraseña.</td>
+                  </tr>
+                  <tr>
+                    <td><code>RECAPTCHA_SITE_KEY</code>, <code>RECAPTCHA_SECRET_KEY</code></td>
+                    <td>Google reCAPTCHA v3.</td>
+                  </tr>
+                  <tr>
+                    <td><code>RECAPTCHA_BYPASS_LOCAL</code></td>
+                    <td><code>true</code> solo con <code>APP_ENV=local</code>: omite HTTP a Google.</td>
+                  </tr>
+                  <tr>
+                    <td><code>TOTP_BYPASS_LOCAL</code></td>
+                    <td><code>true</code> solo local: omite 2FA en login y API protegida.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Frontend (<code>quorum-frontend/.env.local</code>)</h3>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Variable</th>
+                    <th>Notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>NEXT_PUBLIC_RECAPTCHA_SITE_KEY</code></td>
+                    <td>Clave pública v3 (producción).</td>
+                  </tr>
+                  <tr>
+                    <td><code>NEXT_PUBLIC_RECAPTCHA_BYPASS_LOCAL</code></td>
+                    <td><code>true</code>: no carga script Google; envía <code>local-bypass</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note warn">
+              Para desarrollo sin reCAPTCHA ni 2FA: en backend
+              <code>RECAPTCHA_BYPASS_LOCAL=true</code> y <code>TOTP_BYPASS_LOCAL=true</code>; en front
+              <code>NEXT_PUBLIC_RECAPTCHA_BYPASS_LOCAL=true</code>. Nunca en producción.
+            </p>
+          </section>
+
+          <section id="desarrollo-local" class="section">
+            <h2>Desarrollo local</h2>
+            <h3>DevQuickLogin</h3>
+            <p>
+              En <code>npm run dev</code> (<code>NODE_ENV=development</code>), la pantalla
+              <code>/login</code> muestra el panel «Acceso rápido de pruebas» que rellena correo y
+              contraseña (no inicia sesión solo). Implementado en
+              <code>components/auth/DevQuickLogin.tsx</code>.
+            </p>
+            <h3>Login unificado</h3>
+            <ul>
+              <li><code>POST /api/auth/login</code> — correo, contraseña, <code>recaptcha_token</code>.</li>
+              <li>
+                <code>POST /api/auth/login-aprendiz</code> — <strong>410 Gone</strong>; mensaje: usar
+                login principal. Endpoint legacy.
+              </li>
+              <li>Aprendiz: sin 2FA; redirección UI a <code>/mi-historial</code>.</li>
+              <li>Staff: <code>totp_sesion_completa: false</code> hasta verificar TOTP (salvo bypass).</li>
+            </ul>
+          </section>
+
+          <section id="usuarios-prueba" class="section">
+            <h2>Usuarios de prueba</h2>
+            <p>
+              Mismas cuentas tras importar el dump (camino A) o tras
+              <code>php artisan migrate --seed</code> (camino B; seeder
+              <code>database/seeders/UsuarioSeeder.php</code>). Contraseña staff:
+              <code>Admin123!</code>. Aprendiz: <code>33333333</code>.
+            </p>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Rol</th>
+                    <th>Correo</th>
+                    <th>Contraseña</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Administrador</td>
+                    <td>andresfelipeorozcopiedrahita@gmail.com</td>
+                    <td><code>Admin123!</code></td>
+                  </tr>
+                  <tr>
+                    <td>Coordinador</td>
+                    <td>sbecerra@sena.edu.co</td>
+                    <td><code>Admin123!</code></td>
+                  </tr>
+                  <tr>
+                    <td>Instructor</td>
+                    <td>documentosorozco25@gmail.com</td>
+                    <td><code>Admin123!</code></td>
+                  </tr>
+                  <tr>
+                    <td>Gestor</td>
+                    <td>mgomez@sena.edu.co</td>
+                    <td><code>Admin123!</code></td>
+                  </tr>
+                  <tr>
+                    <td>Aprendiz</td>
+                    <td>andres@aprendiz.sena.edu.co</td>
+                    <td><code>33333333</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note">
+              Login unificado: correo + contraseña en <code>POST /api/auth/login</code>. El endpoint
+              legacy <code>POST /api/auth/login-aprendiz</code> responde <strong>410 Gone</strong>.
+              En desarrollo, <code>DevQuickLogin</code> rellena estas cuentas. Con el dump, activa
+              bypass de TOTP y reCAPTCHA en local (ver instalación).
+            </p>
+            <p>
+              Orden de seeders (<code>DatabaseSeeder.php</code>): Macrorregiones → Regionales →
+              Centros → Programas → Usuarios → Configuración → Días festivos.
+            </p>
+          </section>
+
+          <section id="arquitectura-auth" class="section">
+            <h2>Autenticación y sesión</h2>
+            <ul>
+              <li>Laravel Sanctum SPA: cookies stateful entre Next y API.</li>
+              <li>
+                Middleware <code>EnsureTotpSessionOk</code> en la mayoría de rutas de panel (staff con
+                2FA completado en sesión).
+              </li>
+              <li>
+                Excepciones sin TOTP en sesión: <code>GET /api/mi-historial</code>,
+                <code>PATCH /api/perfil/contrasena</code> (con <code>auth:sanctum</code>).
+              </li>
+              <li>Recuperación: <code>POST /api/auth/recuperar</code>, <code>POST /api/auth/reset</code> (throttle 5/min).</li>
+            </ul>
+          </section>
+
+          <section id="rutas-ui" class="section">
+            <h2>Rutas UI (referencia completa)</h2>
+            <p>23 páginas bajo <code>quorum-frontend/app/</code>:</p>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Ruta</th>
+                    <th>Archivo / notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>/</code></td><td>Redirige a login</td></tr>
+                  <tr><td><code>/login</code></td><td>(auth)/login</td></tr>
+                  <tr><td><code>/recuperar</code></td><td>(auth)/recuperar</td></tr>
+                  <tr><td><code>/reset</code></td><td>(auth)/reset</td></tr>
+                  <tr><td><code>/2fa/configurar</code></td><td>(auth)/2fa/configurar</td></tr>
+                  <tr><td><code>/2fa/verificar</code></td><td>(auth)/2fa/verificar</td></tr>
+                  <tr><td><code>/dashboard</code></td><td>Staff</td></tr>
+                  <tr><td><code>/usuarios</code></td><td>Admin</td></tr>
+                  <tr><td><code>/fichas</code>, <code>/fichas/nueva</code>, <code>/fichas/[id]</code></td><td>Admin</td></tr>
+                  <tr><td><code>/admin/centros</code></td><td>Admin — menú activo</td></tr>
+                  <tr><td><code>/admin/programas</code></td><td>Admin</td></tr>
+                  <tr><td><code>/centros-formacion</code></td><td>Legacy, sin ítem en sidebar</td></tr>
+                  <tr><td><code>/asistencia/tomar</code></td><td>Instructor, gestor</td></tr>
+                  <tr><td><code>/asistencia/calendario</code></td><td>Instructor, gestor</td></tr>
+                  <tr><td><code>/asistencia/historial</code></td><td>Varios</td></tr>
+                  <tr><td><code>/asistencia/auditoria</code></td><td>Admin</td></tr>
+                  <tr><td><code>/evidencias</code></td><td>Coordinador, instructor, gestor</td></tr>
+                  <tr><td><code>/coordinador</code></td><td>Admin, coordinador</td></tr>
+                  <tr><td><code>/mi-historial</code></td><td>Aprendiz</td></tr>
+                  <tr><td><code>/configuracion</code></td><td>Admin</td></tr>
+                  <tr><td><code>/perfil</code></td><td>Perfil / contraseña</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="api-resumen" class="section">
+            <h2>API REST (resumen)</h2>
+            <p>Prefijo <code>/api</code> — ver <code>quorum-backend/routes/api.php</code>.</p>
+            <ul class="pill-list">
+              <li><strong>Health:</strong> <code>GET /ping</code></li>
+              <li>
+                <strong>Auth público:</strong> <code>POST /auth/login</code>;
+                <code>POST /auth/login-aprendiz</code> (410);
+                <code>POST /auth/recuperar</code>, <code>POST /auth/reset</code>
+              </li>
+              <li>
+                <strong>Auth sesión:</strong> <code>POST /auth/logout</code>, <code>GET /auth/me</code>,
+                <code>POST /auth/2fa/configurar</code>, <code>POST /auth/2fa/verificar</code>
+              </li>
+              <li><strong>Aprendiz:</strong> <code>GET /mi-historial</code></li>
+              <li><strong>Perfil:</strong> <code>PATCH /perfil/contrasena</code></li>
+              <li>
+                <strong>Con Sanctum + TOTP OK:</strong> dashboard, usuarios, macrorregiones, regionales,
+                centros/programas (lectura), fichas CRUD + aprendices + import, asistencia (historial,
+                evidencias, iniciar/guardar/actualizar, excusa-evidencia), reportes excel, coordinador/*,
+                calendario, configuración, festivos, historial-actividad
+              </li>
+              <li>
+                <strong>Admin (<code>middleware admin</code>):</strong>
+                <code>/admin/centros-formacion*</code>,
+                <code>/admin/programas-formacion*</code>,
+                <code>/admin/auditoria-asistencia</code>
+              </li>
+            </ul>
+          </section>
+
+          <section id="diccionario" class="section">
+            <h2>Diccionario de datos</h2>
+            <p>Tablas principales (migraciones):</p>
+            <div class="table-wrap">
+              <table class="doc-table">
+                <thead>
+                  <tr>
+                    <th>Tabla</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>macrorregiones</code></td><td>Macrorregiones SENA (catálogo geográfico)</td></tr>
+                  <tr><td><code>regionales</code></td><td>Regionales SENA (pertenecen a una macrorregión)</td></tr>
+                  <tr><td><code>centros_formacion</code></td><td>Centros SENA (<code>regional_id</code> opcional)</td></tr>
+                  <tr><td><code>programas_formacion</code></td><td>Programas (<code>tipo</code>: técnico, tecnólogo, operario, auxiliar, especialización, complementaria)</td></tr>
+                  <tr><td><code>usuarios</code></td><td>Staff y aprendices</td></tr>
+                  <tr><td><code>fichas_caracterizacion</code></td><td>Fichas</td></tr>
+                  <tr><td><code>jornadas_ficha</code>, <code>horarios</code></td><td>Jornada y horarios</td></tr>
+                  <tr><td><code>ficha_instructor</code></td><td>Asignación instructores</td></tr>
+                  <tr><td><code>sesiones</code></td><td>Sesiones de asistencia</td></tr>
+                  <tr><td><code>registros_asistencia</code></td><td>Registro por aprendiz/sesión</td></tr>
+                  <tr><td><code>registros_asistencia_backup</code></td><td>Respaldo histórico</td></tr>
+                  <tr><td><code>dias_festivos</code></td><td>Festivos</td></tr>
+                  <tr><td><code>tokens_reset</code></td><td>Reset contraseña</td></tr>
+                  <tr><td><code>intentos_login</code></td><td>Intentos fallidos</td></tr>
+                  <tr><td><code>importaciones_aprendices</code></td><td>Trazabilidad Excel</td></tr>
+                  <tr><td><code>historial_actividad</code></td><td>Auditoría de acciones</td></tr>
+                  <tr><td><code>configuracion</code></td><td>Parámetros globales</td></tr>
+                  <tr><td><code>personal_access_tokens</code></td><td>Sanctum</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="troubleshooting" class="section">
+            <h2>Troubleshooting técnico</h2>
+            <ul class="pill-list">
+              <li>
+                <strong>CORS / cookies / 401:</strong> alinea <code>FRONTEND_URL</code>,
+                <code>SESSION_DOMAIN</code>, <code>SANCTUM_STATEFUL_DOMAINS</code> con el puerto real
+                del navegador (3000 o 3001).
+              </li>
+              <li><strong>API caída:</strong> MySQL, <code>php artisan serve</code>, firewall.</li>
+              <li><strong>Excel 500:</strong> falta <code>plantilla_asistencia.xlsx</code> en storage.</li>
+              <li>
+                <strong>reCAPTCHA 422:</strong> claves válidas o bypass local en ambos lados.
+              </li>
+              <li><strong>Staff bloqueado en API:</strong> completar 2FA o <code>TOTP_BYPASS_LOCAL=true</code> en local.</li>
+              <li><strong>410 login-aprendiz:</strong> cliente antiguo; migrar a <code>POST /auth/login</code>.</li>
+              <li><strong>Aprendiz no entra tras seed:</strong> asignar contraseña en BD o desde admin usuarios.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="doc-footer">
+      <p>QUORUM — SENA CPIC · Manual técnico · 2026</p>
+    </footer>
+    <script src="assets/docs.js" defer></script>
+  </body>
+</html>
